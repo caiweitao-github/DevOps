@@ -1,0 +1,15 @@
+- name: recover bash_profile
+  copy:
+    remote_src: True
+    src: "{{ profile_path }}/.bash_profile-bak"
+    dest: "{{ profile_path }}/.bash_profile"
+    follow: yes
+- name: modify the bash_profile
+  shell: crontab -l|sed  's/"{{ db_bak }}"/"{{ db_host }}"/g'|crontab
+- name: stop process_monitor
+  shell: ps -ef|grep -v grep|grep process_monitor.py |awk '{print $2}'|xargs kill -9
+  notify: start process_monitor
+- name: restart process
+  shell: /bin/bash -c "source {{ profile_path }}/.bash_profile && ps -ef|grep -v grep|grep -E {{ item }} |awk '{print \$2}'|xargs kill -9"
+  with_items:
+    - "{{ contents[ansible_facts['hostname']] }}"

@@ -1,0 +1,26 @@
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    k8s-app: fl-extract
+    qcloud-app: fl-extract
+  name: fl-extract
+  namespace: kdl
+spec:
+  clusterIP: 192.168.253.150
+  clusterIPs:
+  - 192.168.253.150
+  internalTrafficPolicy: Cluster
+  ipFamilies:
+  - IPv4
+  ipFamilyPolicy: SingleStack
+  ports:
+  - name: 16001-16001-tcp-2wo042npxzm
+    port: 16001
+    protocol: TCP
+    targetPort: 16001
+  selector:
+    k8s-app: fl-extract
+    qcloud-app: fl-extract
+  sessionAffinity: None
+  type: ClusterIP

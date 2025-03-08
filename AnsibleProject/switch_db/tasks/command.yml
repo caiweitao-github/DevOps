@@ -1,0 +1,5 @@
+---
+- shell: hostname
+  register: res
+- debug:
+    var: res.stdout

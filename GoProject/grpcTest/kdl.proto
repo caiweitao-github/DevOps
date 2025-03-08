@@ -1,0 +1,28 @@
+syntax = "proto3";
+
+package kdl;
+
+option go_package = "./service";
+
+message Parameter {
+  string ServerIP = 1;
+  int32 Num = 2;
+}
+
+message Result {
+	string ServerCode = 1;
+	string NodeCode = 2;
+	string Source = 3;
+	string NodeIP = 4;
+	string NodePort = 5;
+}
+
+
+
+service KDLService {
+  rpc GetData(Parameter) returns (ResultList);
+}
+
+message ResultList {
+  repeated Result results = 1;
+}

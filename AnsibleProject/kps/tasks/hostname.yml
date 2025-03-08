@@ -1,0 +1,10 @@
+---
+- name: test
+  hosts: kps
+  tasks:
+    - name: hostname
+      shell: cat /etc/hostname
+      register: hostname_result
+    - name: Show hostname result
+      debug:
+        msg: "{{ hostname_result.stdout }}"

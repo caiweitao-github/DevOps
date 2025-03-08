@@ -1,0 +1,13 @@
+- name: download file
+  get_url:
+    url: https://kdl-tps.oss-cn-beijing.aliyuncs.com/release/tps_1.4.5_Linux_amd64.tar.gz
+    dest: /root/tps_Linux_amd64
+- name: tar file
+  shell: cd /root/tps_Linux_amd64 && tar -xf /root/tps_Linux_amd64/tps_1.4.5_Linux_amd64.tar.gz
+- name: restart proxy
+  systemd:
+    name: "{{ item }}"
+    state: restarted
+  loop:
+    - proxy_tps
+    - proxy_tps_b

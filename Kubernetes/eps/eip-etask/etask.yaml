@@ -1,0 +1,26 @@
+apiVersion: v1
+data:
+  etask.json: |-
+    {
+      "Secret": "",
+      "Log": {
+        "Encoding": "json"
+      },
+      "DB": {
+        "Database": "",
+        "Host": "",
+        "Username": "",
+        "Password": "",
+        "MaxIdleConn": 100,
+        "MaxOpenConn": 500,
+        "Debug": false
+      },
+      "Redis": {
+        "Host": "",
+        "Pass": ""
+      }
+    }
+kind: ConfigMap
+metadata:
+  name: eip-etask
+  namespace: kdl

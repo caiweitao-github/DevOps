@@ -1,0 +1,90 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    description: kdl-proxy-hub
+  labels:
+    k8s-app: kdl-proxy-hub
+    qcloud-app: kdl-proxy-hub
+spec:
+  progressDeadlineSeconds: 600
+  replicas: 2
+  revisionHistoryLimit: 10
+  selector:
+    matchLabels:
+      k8s-app: kdl-proxy-hub
+      qcloud-app: kdl-proxy-hub
+  strategy:
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        k8s-app: kdl-proxy-hub
+        qcloud-app: kdl-proxy-hub
+    spec:
+      affinity:
+        nodeAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - preference:
+              matchExpressions:
+              - key: k8s
+                operator: In
+                values:
+                - node3
+                - node4
+              - key: k8s
+                operator: NotIn
+                values:
+                - node1
+                - node2
+            weight: 10
+      containers:
+      - image: ccr.ccs.tencentyun.com/kdlproxy/kdl-proxy-hub:v1.2.6
+        imagePullPolicy: Always
+        lifecycle:
+          preStop:
+            exec:
+              command:
+              - /bin/sh
+              - -c
+              - sleep 5
+        name: kdl-proxy-hub
+        readinessProbe:
+          exec:
+            command:
+            - /bin/sh
+            - -c
+            - sleep 3
+          failureThreshold: 2
+          periodSeconds: 10
+          successThreshold: 1
+          timeoutSeconds: 4
+        resources:
+          limits:
+            cpu: "2"
+            memory: 2Gi
+          requests:
+            cpu: "1"
+            memory: 1Gi
+        securityContext:
+          privileged: false
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+        volumeMounts:
+        - mountPath: /app/log
+          name: data2
+      dnsPolicy: ClusterFirst
+      imagePullSecrets:
+      - name: kdlproxy
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      securityContext: {}
+      terminationGracePeriodSeconds: 30
+      volumes:
+      - hostPath:
+          path: /data2/log/proxy
+          type: DirectoryOrCreate
+        name: data2

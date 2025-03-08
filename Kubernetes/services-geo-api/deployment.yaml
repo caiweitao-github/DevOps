@@ -1,0 +1,59 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    description: ""
+  name: services-geo-api
+  namespace: kdl
+  creationTimestamp: "2024-07-24T10:19:51Z"
+  labels:
+    k8s-app: services-geo-api
+    qcloud-app: services-geo-api
+spec:
+  progressDeadlineSeconds: 600
+  replicas: 2
+  revisionHistoryLimit: 10
+  selector:
+    matchLabels:
+      k8s-app: services-geo-api
+      qcloud-app: services-geo-api
+  strategy:
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+    type: RollingUpdate
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        k8s-app: services-geo-api
+        qcloud-app: services-geo-api
+    spec:
+      affinity: {}
+      containers:
+      - env:
+        - name: PATH
+          value: /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+        - name: TZ
+          value: Asia/Shanghai
+        image: ccr.ccs.tencentyun.com/kdlproxy/geo-api:v0.0.5
+        imagePullPolicy: Always
+        name: geo-api
+        resources:
+          limits:
+            cpu: 500m
+            memory: 256Mi
+          requests:
+            cpu: 250m
+            memory: 128Mi
+        securityContext:
+          privileged: false
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+      dnsPolicy: ClusterFirst
+      imagePullSecrets:
+      - name: kdlproxy
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      securityContext: {}
+      terminationGracePeriodSeconds: 30

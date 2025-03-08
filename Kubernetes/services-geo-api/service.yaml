@@ -1,0 +1,26 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: services-geo-api
+  namespace: kdl
+  labels:
+    k8s-app: services-geo-api
+    qcloud-app: services-geo-api
+spec:
+  clusterIP: 192.168.252.161
+  clusterIPs:
+  - 192.168.252.161
+  internalTrafficPolicy: Cluster
+  ipFamilies:
+  - IPv4
+  ipFamilyPolicy: SingleStack
+  ports:
+  - name: 16001-16001-tcp-2yr0ckdn7vi
+    port: 16001
+    protocol: TCP
+    targetPort: 16001
+  selector:
+    k8s-app: services-geo-api
+    qcloud-app: services-geo-api
+  sessionAffinity: None
+  type: ClusterIP

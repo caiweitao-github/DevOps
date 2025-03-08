@@ -1,0 +1,19 @@
+- name: update version
+  shell: wget -O /etc/yum.repos.d/CentOS-Base.repo http://mirrors.cloud.tencent.com/repo/centos7_base.repo
+
+- name: clean env
+  shell: yum clean all && yum -y install gcc
+  register: res
+  
+
+- name: make redis
+  shell: |
+    cd /root/redis-2.8.19/deps
+    make hiredis lua jemalloc linenoise
+    cd ..
+    make clean
+    make && make install
+    mkdir -p /etc/redis/
+    \cp /root/dps/redis.conf /etc/redis/
+    redis-server /etc/redis/redis.conf
+  when: res is success

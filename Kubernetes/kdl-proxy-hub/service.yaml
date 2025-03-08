@@ -1,0 +1,30 @@
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    k8s-app: kdl-proxy-hub
+    qcloud-app: kdl-proxy-hub
+  name: kdl-proxy-hub
+  namespace: kdl
+spec:
+  clusterIP: 192.168.253.66
+  clusterIPs:
+  - 192.168.253.66
+  internalTrafficPolicy: Cluster
+  ipFamilies:
+  - IPv4
+  ipFamilyPolicy: SingleStack
+  ports:
+  - name: 9080-9080-tcp-2xuok3ivoto
+    port: 9080
+    protocol: TCP
+    targetPort: 9080
+  - name: metrics
+    port: 6061
+    protocol: TCP
+    targetPort: 6061
+  selector:
+    k8s-app: kdl-proxy-hub
+    qcloud-app: kdl-proxy-hub
+  sessionAffinity: None
+  type: ClusterIP

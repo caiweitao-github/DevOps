@@ -1,0 +1,6 @@
+{
+    "addr": "",
+    "max_conns": 5000,
+    "read_timeout": 30,
+    "write_timeout": 15
+}

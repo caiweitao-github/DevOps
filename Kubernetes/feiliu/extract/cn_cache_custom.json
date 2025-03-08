@@ -1,0 +1,6 @@
+{
+  "extract_random_max_shard": 10000,
+  "extract_rr_max_shard": 1000,
+  "extract_rr_return_count": 6000,
+  "interval_second": 2
+}

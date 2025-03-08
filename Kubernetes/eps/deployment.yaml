@@ -1,0 +1,88 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    description: ""
+  name: eps-srv
+  namespace: kdl
+  labels:
+    k8s-app: eps-srv
+    qcloud-app: eps-srv
+spec:
+  progressDeadlineSeconds: 600
+  replicas: 0
+  revisionHistoryLimit: 10
+  selector:
+    matchLabels:
+      k8s-app: eps-srv
+      qcloud-app: eps-srv
+  strategy:
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        k8s-app: eps-srv
+        qcloud-app: eps-srv
+    spec:
+      affinity: {}
+      containers:
+      - env:
+        - name: PATH
+          value: /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+        - name: TZ
+          value: Asia/Shanghai
+        image: ccr.ccs.tencentyun.com/kdlproxy/eps:0.1.7
+        imagePullPolicy: Always
+        lifecycle:
+          preStop:
+            exec:
+              command:
+              - /bin/sh
+              - -c
+              - sleep 5
+        name: eps-srv
+        readinessProbe:
+          exec:
+            command:
+            - /bin/sh
+            - -c
+            - sleep 3
+          failureThreshold: 2
+          periodSeconds: 10
+          successThreshold: 1
+          timeoutSeconds: 4
+        resources:
+          limits:
+            cpu: 2000m
+            memory: 1Gi
+          requests:
+            cpu: 1000m
+            memory: 256Mi
+        securityContext:
+          privileged: false
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+        volumeMounts:
+        - name: timezone
+          mountPath: /etc/localtime
+        - mountPath: /app/config/
+          name: eps-srv
+          readOnly: true
+      dnsPolicy: ClusterFirst
+      imagePullSecrets:
+      - name: kdlproxy
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      securityContext: {}
+      terminationGracePeriodSeconds: 30
+      volumes:
+      - name: timezone
+        hostPath:
+          path: /usr/share/zoneinfo/Asia/Shanghai
+      - configMap:
+          defaultMode: 420
+          name: eps
+        name: eps-srv

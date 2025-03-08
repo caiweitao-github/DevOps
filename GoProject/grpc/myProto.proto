@@ -1,0 +1,16 @@
+syntax = "proto3";
+package main;
+option go_package = "./service";
+
+message Request{
+  string value = 1;
+}
+message Response{
+  string value = 1;
+}
+
+
+service HelloService{
+  rpc Hello (Request) returns (Response){}
+  rpc Channel(stream Request) returns (stream Response) {}
+}

@@ -1,0 +1,3 @@
+---
+# vars file for kps
+agent_path: /opt/categraf

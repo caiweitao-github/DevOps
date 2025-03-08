@@ -1,0 +1,35 @@
+- name: delete old file
+  file:
+    path: /root/.kps/kps_1.0.8_Linux_amd64.tar.gz
+    state: absent 
+
+- name: update proxy_kps
+  get_url:
+    url: https://kdl-kps.oss-cn-beijing.aliyuncs.com/release/kps_1.0.8_Linux_amd64.tar.gz
+    dest: /root/.kps
+
+- name: Unarchive tar file
+  unarchive:
+    src: /root/.kps/kps_1.0.8_Linux_amd64.tar.gz
+    dest: /root/.kps
+    remote_src: yes
+
+- name: reload daemon
+  systemd:
+    daemon_reload: yes
+  register: res
+
+- name: restart proxy_kps
+  systemd:
+    name: "{{ item }}"
+    enabled: yes
+    state: restarted
+  loop:
+    - proxy_kps
+  when: res is success
+
+- name: start rc_kps
+  shell: |
+    ps -ef|grep -v grep|grep -E "proxy_kps" |awk '{print $2}'|xargs kill
+    sh /root/kps/rc_kps
+  when: res is not success

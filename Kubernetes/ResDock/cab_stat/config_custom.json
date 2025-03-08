@@ -1,0 +1,5 @@
+{
+  "gateway_addr": "192.144.137.187:12370",
+  "random_min_percent": 2,
+  "random_max_percent": 5
+}

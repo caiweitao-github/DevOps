@@ -1,0 +1,7 @@
+---
+- name: start process_monitor
+  shell: 'bash -c "source ~/.bash_profile && nohup python -u /home/httpproxy/monitor/process_monitor.py &"'
+- name: restart process
+  shell: /bin/bash -c "source {{ profile_path }}/.bash_profile && ps -ef|grep -v grep|grep -E {{ item }} |awk '{print \$2}'|xargs kill -9"
+  with_items:
+    - "{{ contents[ansible_facts['hostname']] }}"

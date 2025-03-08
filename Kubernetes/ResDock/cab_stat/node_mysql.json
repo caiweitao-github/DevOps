@@ -1,0 +1,10 @@
+{
+    "host": "",
+    "port": 3306,
+    "username": "",
+    "password": "",
+    "database": "",
+    "max_idle_conns": 100,
+    "max_open_conns": 500,
+    "conn_max_lifetime": 180
+}

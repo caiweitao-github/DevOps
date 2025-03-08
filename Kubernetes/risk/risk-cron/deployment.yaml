@@ -1,0 +1,89 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    description: ""
+  generation: 9
+  labels:
+    k8s-app: risk-cron
+    qcloud-app: risk-cron
+  name: risk-cron
+  namespace: kdl
+spec:
+  progressDeadlineSeconds: 600
+  replicas: 1
+  revisionHistoryLimit: 10
+  selector:
+    matchLabels:
+      k8s-app: risk-cron
+      qcloud-app: risk-cron
+  strategy:
+    rollingUpdate:
+      maxSurge: 0
+      maxUnavailable: 1
+    type: RollingUpdate
+  template:
+    metadata:
+      annotations:
+        qcloud-redeploy-timestamp: "1730184599779"
+      creationTimestamp: null
+      labels:
+        k8s-app: risk-cron
+        qcloud-app: risk-cron
+    spec:
+      affinity: {}
+      containers:
+      - env:
+        - name: PATH
+          value: /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+        - name: TZ
+          value: Asia/Shanghai
+        image: ccr.ccs.tencentyun.com/kdlproxy/cron:v0.0.1
+        imagePullPolicy: Always
+        name: risk-cron
+        resources:
+          limits:
+            cpu: 500m
+            memory: 1Gi
+          requests:
+            cpu: 250m
+            memory: 256Mi
+        securityContext:
+          privileged: false
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+        volumeMounts:
+        - mountPath: /app/config
+          name: risk-cron-config
+          readOnly: true
+      dnsPolicy: ClusterFirst
+      imagePullSecrets:
+      - name: kdlproxy
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      securityContext: {}
+      terminationGracePeriodSeconds: 30
+      volumes:
+      - configMap:
+          defaultMode: 420
+          name: risk-cron
+        name: risk-cron-config
+status:
+  availableReplicas: 1
+  conditions:
+  - lastTransitionTime: "2024-10-29T06:39:19Z"
+    lastUpdateTime: "2024-10-29T06:39:19Z"
+    message: Deployment has minimum availability.
+    reason: MinimumReplicasAvailable
+    status: "True"
+    type: Available
+  - lastTransitionTime: "2024-10-29T03:23:29Z"
+    lastUpdateTime: "2024-10-29T06:50:02Z"
+    message: ReplicaSet "risk-cron-5d9b66795c" has successfully progressed.
+    reason: NewReplicaSetAvailable
+    status: "True"
+    type: Progressing
+  observedGeneration: 9
+  readyReplicas: 1
+  replicas: 1
+  updatedReplicas: 1

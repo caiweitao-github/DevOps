@@ -1,0 +1,14 @@
+---
+# handlers file for kps
+- name: restart proxy_kps
+  systemd:
+    name: proxy_kps
+    enabled: yes
+    state: restarted
+
+- name: reload daemon
+  systemd:
+    daemon_reload: yes
+
+- name: restart monitor
+  shell: bash /root/kps/rc_kps

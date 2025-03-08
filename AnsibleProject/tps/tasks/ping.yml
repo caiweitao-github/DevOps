@@ -1,0 +1,9 @@
+---
+- name: Deploy and configure Categraf
+  hosts: tps
+  become: true
+
+  tasks:
+    - name: Ping the host
+      ping:
+      register: ping_result

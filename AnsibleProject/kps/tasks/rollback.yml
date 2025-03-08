@@ -1,0 +1,33 @@
+- name: update proxy_kps
+  get_url:
+    url: ""
+    dest: /root/.kps
+
+- name: Unarchive tar file
+  unarchive:
+    src: /root/.kps/kps_1.0.6_Linux_amd64.tar.gz
+    dest: /root/.kps
+    remote_src: yes
+
+- name: reload daemon
+  systemd:
+    daemon_reload: yes
+  register: res
+
+- name: restart proxy_kps
+  systemd:
+    name: "{{ item }}"
+    enabled: yes
+    state: restarted
+  loop:
+    - proxy_kps
+  when: res is success
+
+- name: start rc_kps
+  shell: |
+    ps -ef|grep -v grep|grep -E "proxy_kps" |awk '{print $2}'|xargs kill
+    sh /root/kps/rc_kps
+  when: res is not success
+
+- name: update release file
+  shell: source /root/.bash_profile && echo `date "+%Y-%m-%d %H:%M:%S"` update kps_go to 1.0.8 >> /root/svn.log

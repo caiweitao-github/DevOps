@@ -1,0 +1,30 @@
+apiVersion: v1
+data:
+  app.json: |-
+    {
+      "Secret": "",
+      "Log": {
+        "Encoding": "json"
+      },
+      "Rest": {
+        "Addr": "",
+        "Pass": ""
+      },
+      "DB": {
+        "Database": "",
+        "Host": "",
+        "Username": "",
+        "Password": "",
+        "MaxIdleConn": 100,
+        "MaxOpenConn": 500,
+        "Debug": false
+      },
+      "Redis": {
+        "Host": "",
+        "Pass": ""
+      }
+    }
+kind: ConfigMap
+metadata:
+  name: eip-eps
+  namespace: kdl

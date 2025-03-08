@@ -1,0 +1,27 @@
+- name: update kps rc_kps
+  shell: cd /root/kps && svn up --username 'kps' --password '$SbHA*5pw#'
+
+- name: modtify categraf conf
+  shell: sed -i 's//g' /opt/categraf/conf/config.toml
+
+- name: reload daemon
+  systemd:
+    daemon_reload: yes
+  register: res
+
+- name: restart proxy_kps
+  systemd:
+    name: "{{ item }}"
+    enabled: yes
+    state: restarted
+  loop:
+    - proxy_kps
+    - categraf
+  when: res is success
+
+- name: start rc_kps
+  shell: |
+    ps -ef|grep -v grep|grep -E "proxy_kps" |awk '{print $2}'|xargs kill
+    sh /root/kps/rc_kps
+    /opt/categraf/categraf &
+  when: res is not success

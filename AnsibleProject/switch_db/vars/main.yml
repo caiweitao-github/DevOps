@@ -1,0 +1,5 @@
+---
+contents: "{{ lookup('file', '/home/httpproxy/ansible_project/file/process.txt') }}"
+profile_path: /home/httpproxy
+db_host: 114.114.114.114
+db_bak: 10.0.3.17

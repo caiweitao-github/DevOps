@@ -1,0 +1,16 @@
+- name: backup bash_profile
+  copy:
+    remote_src: True
+    src: "{{ profile_path }}/.bash_profile"
+    dest: "{{ profile_path }}/.bash_profile-bak"
+- name: modify the bash_profile
+  shell: crontab -l|sed  's/"{{ db_host }}"/"{{ db_bak }}"/g'|crontab
+- name: stop process_monitor
+  shell: ps -ef|grep -v grep|grep process_monitor.py |awk '{print $2}'|xargs kill -9
+  notify: start process_monitor
+- name: modify the bash_profile
+  replace:
+    path: "{{ profile_path }}/.bash_profile"
+    regexp: '(.*){{ db_host }}'
+    replace: '\g<1>{{ db_bak }}'
+  notify: restart process

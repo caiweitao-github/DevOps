@@ -1,0 +1,11 @@
+---
+- name: restart process
+  ansible.builtin.shell: bash -c /root/tps_Linux_amd64/restart_tps.sh
+- name: reload daemon
+  systemd:
+    daemon_reload: yes
+- name: restart monitor
+  systemd:
+    name: categraf
+    enabled: yes
+    state: restarted

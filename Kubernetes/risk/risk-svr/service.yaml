@@ -1,0 +1,26 @@
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    k8s-app: risk-svr
+    qcloud-app: risk-svr
+  name: risk-svr
+  namespace: kdl
+spec:
+  clusterIP: 192.168.253.102
+  clusterIPs:
+  - 192.168.253.102
+  internalTrafficPolicy: Cluster
+  ipFamilies:
+  - IPv4
+  ipFamilyPolicy: SingleStack
+  ports:
+  - name: 8080-8080-tcp-2vwaep6y9ty
+    port: 8080
+    protocol: TCP
+    targetPort: 8080
+  selector:
+    k8s-app: risk-svr
+    qcloud-app: risk-svr
+  sessionAffinity: None
+  type: ClusterIP

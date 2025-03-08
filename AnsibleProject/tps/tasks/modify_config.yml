@@ -1,0 +1,19 @@
+---
+- name: Deploy and configure Categraf
+  hosts: tps
+  become: true
+
+  tasks:
+    - name: Update IP address in config
+      shell: sed -i 's/219.150.218.219/218.93.208.139/g' /opt/categraf/conf/config.toml
+      
+    - name: restart proxy_tps
+      systemd:
+        name: categraf.service
+        enabled: yes
+        state: restarted
+      when: res is success
+    
+    - name: start categraf.service
+      shell: nohup /opt/categraf/categraf &
+      when: res is not success

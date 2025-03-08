@@ -1,0 +1,5 @@
+- name: update version
+  shell: |
+    svn up --username 'kps' --password '$SbHA*5pw#' /root/dps
+    ps -ef|grep 'proxy'|grep -v grep |awk '{print $2}'|xargs kill -9
+    bash /root/dps/rc_dps

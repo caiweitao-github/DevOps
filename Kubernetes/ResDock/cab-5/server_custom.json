@@ -1,0 +1,6 @@
+{
+  "gateway": [""],
+  "extract_interval_second": 5,
+  "max_extract_interval_second": 60,
+  "batch_size": 500
+}

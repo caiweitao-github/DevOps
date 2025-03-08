@@ -1,0 +1,20 @@
+go 1.21.3
+
+use (
+	./Aliyun
+	./CC
+	./CodeRepeatCheck
+	./DomainMonitoring
+	./FpsHA
+	./Tencloud
+	./TpsDomainCheck
+	./TpsHA
+	./fixChangeIP
+	./fps
+	./fpsDomainSwitch
+	./gopool
+	./gotest
+	./iplocation
+	./requestsLimit
+	./util
+)

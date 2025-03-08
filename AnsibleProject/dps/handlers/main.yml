@@ -1,0 +1,9 @@
+---
+- name: reload daemon
+  systemd:
+    daemon_reload: yes
+- name: restart monitor
+  systemd:
+    name: categraf.service
+    enabled: yes
+    state: restarted
